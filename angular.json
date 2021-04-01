@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "amcharts-test": {
@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "amcharts-test"
+    }
+  },
+  "defaultProject": "amcharts-test",
+  "cli": {
+    "analytics": "50662955-9bf3-4f53-baa7-8d9e14b3b569"
+  }
 }
