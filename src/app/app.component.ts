@@ -32,22 +32,22 @@ export class AppComponent implements OnInit {
 
   createSparkLine(context: any) {
     const chart = this.container.createChild(am4charts.XYChart);
-    chart.width = am4core.percent(100);
-    chart.height = 500;
+    chart.width = am4core.percent(30);
+    chart.height = 150;
 
     chart.data = context.data;
 
-    // chart.titles.template.fontSize = 11;
-    // chart.titles.template.fontWeight = 'bold';
-    // chart.titles.template.textAlign = 'left';
-    // chart.titles.template.isMeasured = false;
-    // chart.titles.create().text = context.title;
+    chart.titles.template.fontSize = 11;
+    chart.titles.template.fontWeight = 'bold';
+    chart.titles.template.textAlign = 'left';
+    chart.titles.template.isMeasured = false;
+    chart.titles.create().text = context.title;
 
-    // chart.padding(25, 15, 15, 15);
+    chart.padding(0, 15, 25, 15);
 
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.grid.template.disabled = true;
-    // dateAxis.renderer.labels.template.disabled = true;
+    dateAxis.renderer.labels.template.disabled = true;
     dateAxis.startLocation = 0.5;
     dateAxis.endLocation = 0.7;
     dateAxis.cursorTooltipEnabled = false;
@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
     chart.cursor.behavior = 'none';
 
     const series = chart.series.push(new am4charts.LineSeries());
-    series.tooltipText = '{dateX.formatDate(\'yyyy-mm-dd HH:mm:ss\')}: [bold]{value}';
+    series.tooltipText = '{dateX.formatDate(\'yyyy-MM-dd HH:mm:ss\')}: [bold]{value}';
     series.dataFields.dateX = 'date';
     series.dataFields.valueY = 'value';
     series.tensionX = 0.8;
@@ -76,11 +76,11 @@ export class AppComponent implements OnInit {
     series.stroke = this.colors.getIndex(0);
 
     // render data points as bullets
-    // const bullet = series.bullets.push(new am4charts.CircleBullet());
-    // bullet.circle.opacity = 0;
-    // bullet.circle.fill = this.colors.getIndex(0);
-    // bullet.circle.propertyFields.opacity = 'opacity';
-    // bullet.circle.radius = 3;
+    const bullet = series.bullets.push(new am4charts.CircleBullet());
+    bullet.circle.opacity = 0;
+    bullet.circle.fill = this.colors.getIndex(0);
+    bullet.circle.propertyFields.opacity = 'opacity';
+    bullet.circle.radius = 3;
 
     return chart;
   }
@@ -200,7 +200,7 @@ export class AppComponent implements OnInit {
         },
         {
           date: '2021-03-26T10:00:00Z',
-          value: 4710
+          value: 100
         },
       ]
     };
@@ -334,10 +334,24 @@ export class AppComponent implements OnInit {
     };
   }
 
+  contextFormatting(context: any): any {
+
+    const formattedList = context.data.map((x: { date: string; value: number}) => ({
+      date: new Date(x.date),
+      value: x.value
+    }));
+
+    return  {
+      title: context.title,
+      data: formattedList
+    };
+  }
+
   ngOnInit(): void {
      this.create();
-     const context = this.gen3();
-     this.createSparkLine(context);
+     const context = this.gen();
+     const context2 = this.contextFormatting(context);
+     this.createSparkLine(context2);
 
      // this.createTimeBasedChart();
   }
